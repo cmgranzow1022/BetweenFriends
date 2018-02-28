@@ -198,6 +198,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AddressesController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
+    <Compile Include="Controllers\FriendsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
@@ -239,6 +240,10 @@
     <Compile Include="Migrations\BFMigrations\201802281626061_addedUserId.Designer.cs">
       <DependentUpon>201802281626061_addedUserId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\BFMigrations\201802281721446_addedPendingRequestTable.cs" />
+    <Compile Include="Migrations\BFMigrations\201802281721446_addedPendingRequestTable.Designer.cs">
+      <DependentUpon>201802281721446_addedPendingRequestTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\BFMigrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BetweenFriendsModels\Address.cs" />
@@ -247,9 +252,11 @@
     <Compile Include="Models\BetweenFriendsModels\Customer_Group.cs" />
     <Compile Include="Models\BetweenFriendsModels\Friend.cs" />
     <Compile Include="Models\BetweenFriendsModels\Group.cs" />
+    <Compile Include="Models\BetweenFriendsModels\PendingRequests.cs" />
     <Compile Include="Models\BetweenFriendsModels\Restaurant.cs" />
     <Compile Include="Models\BetweenFriendsModels\RestaurantSelection.cs" />
     <Compile Include="Models\BetweenFriendsModels\Veto.cs" />
+    <Compile Include="Models\FriendsViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -327,7 +334,13 @@
     <Content Include="Views\Customers\Details.cshtml" />
     <Content Include="Views\Customers\Edit.cshtml" />
     <Content Include="Views\Customers\Index.cshtml" />
-    <Content Include="Views\Customers\Profile.cshtml" />
+    <Content Include="Views\Customers\ProfileAccount.cshtml" />
+    <Content Include="Views\Customers\Friends.cshtml" />
+    <Content Include="Views\Friends\Create.cshtml" />
+    <Content Include="Views\Friends\Delete.cshtml" />
+    <Content Include="Views\Friends\Details.cshtml" />
+    <Content Include="Views\Friends\Edit.cshtml" />
+    <Content Include="Views\Friends\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -365,6 +378,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\BFMigrations\201802281626061_addedUserId.resx">
       <DependentUpon>201802281626061_addedUserId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\BFMigrations\201802281721446_addedPendingRequestTable.resx">
+      <DependentUpon>201802281721446_addedPendingRequestTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

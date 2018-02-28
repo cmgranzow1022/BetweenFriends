@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using BetweenFriends.Models;
 using BetweenFriends.Models.BetweenFriends;
+using Microsoft.AspNet.Identity;
 
 namespace BetweenFriends.Controllers
 {
@@ -114,6 +115,36 @@ namespace BetweenFriends.Controllers
             db.Customers.Remove(customer);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        //GET : Customers/Profile
+        public ActionResult ProfileAccount()
+        {
+            string userId = User.Identity.GetUserId();
+            Customer customer = (from x in db.Customers where x.UserId == userId select x).FirstOrDefault();
+            if (customer == null)
+            {
+                return View();
+            }
+            return View(customer);
+        }
+        //POST Customer/Profile
+        [HttpPost]
+        public ActionResult ProfileAccount([Bind(Include = "CustomerId,FirstName,LastName,EmailAddress,CellPhoneNumber,UserId")]Customer customer)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(customer).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index", "Home");
+            }
+            return View(customer);
+        }
+
+        //GET Customers/Friends
+        public ActionResult Friends()
+        {
+            return View();
         }
 
         protected override void Dispose(bool disposing)

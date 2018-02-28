@@ -1,19 +1,19 @@
-﻿using System;
+﻿using BetweenFriends.Models.BetweenFriends;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
-namespace BetweenFriends.Models.BetweenFriends
+namespace BetweenFriends.Models.BetweenFriendsModels
 {
-    public class Friend 
+    public class PendingRequests
     {
         [Key]
-        public int FriendId { get; set; }
+        public int PendingRequestId { get; set; }
 
-        [ForeignKey("RequesterId"),Column(Order = 0)]
+        [ForeignKey("RequesterId"), Column(Order = 0)]
         public int? CustomerIdOne { get; set; }
         public virtual Customer RequesterId { get; set; }
 
@@ -22,6 +22,3 @@ namespace BetweenFriends.Models.BetweenFriends
         public virtual Customer RequesteeId { get; set; }
     }
 }
-
-
-
