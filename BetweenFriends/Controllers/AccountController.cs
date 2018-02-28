@@ -9,12 +9,15 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using BetweenFriends.Models;
+using BetweenFriends.Models.BetweenFriends;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace BetweenFriends.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -152,19 +155,28 @@ namespace BetweenFriends.Controllers
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var customer = new Customer { FirstName = model.FirstName, LastName = model.LastName, CellPhoneNumber = model.CellPhoneNumber, EmailAddress = model.Email };
+                var address = new Address { Street = model.Street, City = model.City, State = model.State, ZipCode = model.ZipCode };
+                var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-                    return RedirectToAction("Index", "Home");
+                    customer.UserId = user.Id;
+                    db.Customers.Add(customer);
+                    db.Addresses.Add(address);
+                    userManager.AddToRole(userManager.FindByEmail(user.Email).Id, "Customer");
+                    db.SaveChanges();
+                    AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                    return RedirectToAction("Login", "Account");
                 }
+          
                 AddErrors(result);
             }
 

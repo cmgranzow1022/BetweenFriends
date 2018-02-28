@@ -13,6 +13,7 @@ namespace BetweenFriends.Controllers
     [Authorize]
     public class ManageController : Controller
     {
+        
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 

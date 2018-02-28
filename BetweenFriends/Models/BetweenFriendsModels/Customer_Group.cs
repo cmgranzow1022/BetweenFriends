@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
 namespace BetweenFriends.Models.BetweenFriends
 {
-    public class CustomerGroup
+    public class Customer_Group 
     {
         [ForeignKey("Group")]
         public int GroupId { get; set; }

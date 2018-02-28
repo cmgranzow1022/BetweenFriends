@@ -3,6 +3,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using BetweenFriends.Models.BetweenFriends;
+using BetweenFriends.Models.BetweenFriendsModels;
 
 namespace BetweenFriends.Models
 {
@@ -29,5 +31,16 @@ namespace BetweenFriends.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<BetweenFriends.Address> Addresses { get; set; }
+
+        public System.Data.Entity.DbSet<BetweenFriends.Customer> Customers { get; set; }
+        public DbSet<Friend> Friends { get; set; }
+
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<Restaurant> Restaurants { get; set; }
+        public DbSet<Veto> Vetoes { get; set; }
+        public DbSet<RestaurantSelection> RestaurantSelection { get; set; }
+  
     }
 }
