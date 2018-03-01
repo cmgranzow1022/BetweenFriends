@@ -24,5 +24,9 @@ namespace BetweenFriends.Models.BetweenFriends
         [ForeignKey("UserId")]
 
         public virtual ApplicationUser User { get; set; }
+        public string FullName { get
+            {
+                return FirstName + " " + LastName;
+            } }
     }
     }

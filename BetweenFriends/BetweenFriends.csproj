@@ -201,6 +201,7 @@
     <Compile Include="Controllers\FriendsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PendingRequestsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -243,6 +244,14 @@
     <Compile Include="Migrations\BFMigrations\201802281721446_addedPendingRequestTable.cs" />
     <Compile Include="Migrations\BFMigrations\201802281721446_addedPendingRequestTable.Designer.cs">
       <DependentUpon>201802281721446_addedPendingRequestTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\BFMigrations\201803011414323_updatedCustomers.cs" />
+    <Compile Include="Migrations\BFMigrations\201803011414323_updatedCustomers.Designer.cs">
+      <DependentUpon>201803011414323_updatedCustomers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\BFMigrations\201803011738507_PRTable.cs" />
+    <Compile Include="Migrations\BFMigrations\201803011738507_PRTable.Designer.cs">
+      <DependentUpon>201803011738507_PRTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\BFMigrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -335,12 +344,17 @@
     <Content Include="Views\Customers\Edit.cshtml" />
     <Content Include="Views\Customers\Index.cshtml" />
     <Content Include="Views\Customers\ProfileAccount.cshtml" />
-    <Content Include="Views\Customers\Friends.cshtml" />
+    <Content Include="Views\Friends\Friends.cshtml" />
     <Content Include="Views\Friends\Create.cshtml" />
     <Content Include="Views\Friends\Delete.cshtml" />
     <Content Include="Views\Friends\Details.cshtml" />
     <Content Include="Views\Friends\Edit.cshtml" />
     <Content Include="Views\Friends\Index.cshtml" />
+    <Content Include="Views\PendingRequests\Create.cshtml" />
+    <Content Include="Views\PendingRequests\Delete.cshtml" />
+    <Content Include="Views\PendingRequests\Details.cshtml" />
+    <Content Include="Views\PendingRequests\Edit.cshtml" />
+    <Content Include="Views\PendingRequests\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -381,6 +395,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\BFMigrations\201802281721446_addedPendingRequestTable.resx">
       <DependentUpon>201802281721446_addedPendingRequestTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\BFMigrations\201803011414323_updatedCustomers.resx">
+      <DependentUpon>201803011414323_updatedCustomers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\BFMigrations\201803011738507_PRTable.resx">
+      <DependentUpon>201803011738507_PRTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

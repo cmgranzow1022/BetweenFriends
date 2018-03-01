@@ -1,0 +1,41 @@
+﻿@model BetweenFriends.Models.FriendsViewModel
+
+@{
+    ViewBag.Title = "RequestFriend";
+   
+}
+
+<h2>Friends</h2>
+
+@*Request Friends*@
+
+
+@using (Html.BeginForm())
+{
+   
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.RequestedCustomerId, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.RequestedCustomerId, Model.AvailableToRequest ,new { @class = "form-control" })
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-md-10">
+            <input type="submit" class="btn btn-default" value="Send Request" />
+        </div>
+    </div>
+
+
+
+
+
+
+
+}
+
+
+
+@*See pending friend requests*@

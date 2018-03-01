@@ -10,6 +10,7 @@ using BetweenFriends.Models;
 using BetweenFriends.Models.BetweenFriends;
 using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
+using BetweenFriends.Models.BetweenFriendsModels;
 
 namespace BetweenFriends.Controllers
 {
@@ -17,6 +18,8 @@ namespace BetweenFriends.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         public List<Customer> customersList = new List<Customer>();
+        
+        
 
         public List<Customer> FriendRequest()
         {
@@ -25,16 +28,18 @@ namespace BetweenFriends.Controllers
         }
         public ActionResult RequestFriend()
         {
+
             FriendsViewModel Friends = new FriendsViewModel();
+
             Friends.AllCustomers = db.Customers.ToList();
             Friends.FriendPairs = db.Friends.ToList();
- 
             LoginViewModel model = new LoginViewModel();
           
             string currentUserId = User.Identity.GetUserId();
-            Friends.customer = (from x in Friends.AllCustomers where x.UserId == currentUserId select x).FirstOrDefault();
-            List<int?> ConfirmedFriends = (from f in Friends.FriendPairs where f.CustomerIdOne == Friends.customer.CustomerId select f.CustomerIdTwo).ToList();
-            List<int?> ConfirmedFriendsTwo = (from f in Friends.FriendPairs where f.CustomerIdTwo == Friends.customer.CustomerId select f.CustomerIdOne).ToList();
+            Friends.LoggedInCustomer = (from x in Friends.AllCustomers where x.UserId == currentUserId select x).FirstOrDefault();
+            Friends.AllCustomers.Remove(Friends.LoggedInCustomer);
+            List<int?> ConfirmedFriends = (from f in Friends.FriendPairs where f.CustomerIdOne == Friends.LoggedInCustomer.CustomerId select f.CustomerIdTwo).ToList();
+            List<int?> ConfirmedFriendsTwo = (from f in Friends.FriendPairs where f.CustomerIdTwo == Friends.LoggedInCustomer.CustomerId select f.CustomerIdOne).ToList();
             ConfirmedFriends.AddRange(ConfirmedFriendsTwo);
             for (int i = 0; i < Friends.AllCustomers.Count; i++)
             {
@@ -49,14 +54,41 @@ namespace BetweenFriends.Controllers
 
             for(int i=0; i < Friends.AllCustomers.Count; i++)
             {
-                if (Friends.AlreadyFriends[i] != Friends.AllCustomers[i])
+                bool matchFound = false;
+                for (int j = 0;  j< Friends.AlreadyFriends.Count; j++)
                 {
-                    Friends.AvailableToRequest.Add(Friends.AllCustomers[i]);
+                    if (Friends.AlreadyFriends[j] == Friends.AllCustomers[i])
+                    {
+                        matchFound = true;
+                    }
                 }
-          
-            }
+                if (!matchFound)
+                {
+                    SelectListItem item = new SelectListItem
+                    {
+                        Text = Friends.AllCustomers[i].FullName,
+                        Value = Friends.AllCustomers[i].CustomerId.ToString()
+                    };
+                    Friends.AvailableToRequest.Add(item);
+                }
+                
 
-            return View(Friends.AvailableToRequest);
+            }
+            return View("Friends",Friends);
+        }
+
+        [HttpPost]
+        public ActionResult RequestFriend([Bind(Include = "CustomerIdOne,CustomerIdTwo,PendingRequestId")] PendingRequests pendingRequest)
+        {
+            //var Request = new PendingRequests { CustomerIdOne = }
+            if (ModelState.IsValid)
+            {
+                //db.Entry(pendingRequest).State = EntityState.Modified;
+                db.PendingRequests.Add(pendingRequest);
+                db.SaveChanges();
+                return RedirectToAction("Index", "Home");
+            }
+            return View("Home");
         }
 
         
