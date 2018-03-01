@@ -13,7 +13,7 @@
 @using (Html.BeginForm())
 {
    
-
+    @Html.HiddenFor(m => m.LoggedInCustomer)
     <div class="form-group">
         @Html.LabelFor(m => m.RequestedCustomerId, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
@@ -28,13 +28,79 @@
         </div>
     </div>
 
-
-
-
-
-
-
 }
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<h3>Pending Requests</h3>
+<div>
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Requests[0].RequesteeId.FullName)
+            </th>
+
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.Requests)
+        {
+            if (Model.LoggedInCustomer.CustomerId == item.CustomerIdTwo)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RequesterId.FullName)
+                    </td>
+
+                    <td>
+                        @Html.ActionLink("Accept", "Accept", new { id = item.PendingRequestId }) 
+                        @Html.ActionLink("Decline", "Decline", new { id = item.PendingRequestId }) 
+
+                    </td>
+                </tr>
+            }
+        }
+
+    </table>
+    <h3>My Pending Requests</h3>
+    <div>
+
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Requests[0].RequesteeId.FullName)
+                </th>
+
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.Requests)
+            {
+                if (Model.LoggedInCustomer.CustomerId == item.CustomerIdOne)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RequesteeId.FullName)
+                        </td>
+
+                        <td>
+                            @Html.ActionLink("Cancel", "Cancel", new { id = item.PendingRequestId }) 
+                           
+
+                        </td>
+                    </tr>
+                }
+            }
+
+        </table>
+
+    </div>
+
+
 
 
 

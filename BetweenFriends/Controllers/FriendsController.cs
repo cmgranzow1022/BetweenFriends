@@ -26,38 +26,60 @@ namespace BetweenFriends.Controllers
             customersList = db.Customers.ToList();
             return customersList;
         }
+
+        public ActionResult PendingFriend()
+        {
+            FriendsViewModel Friends = new FriendsViewModel();
+            List<Customer> AllCustomers = db.Customers.ToList();
+            List<PendingRequests> PRequest = db.PendingRequests.ToList();
+            string currentUserId = User.Identity.GetUserId();
+            Customer LoggedInCustomer = (from x in AllCustomers where x.UserId == currentUserId select x).FirstOrDefault();
+            List<PendingRequests> PendingList = (from x in db.PendingRequests.Include("RequesterId").Include("RequesteeId") where x.CustomerIdTwo == LoggedInCustomer.CustomerId select x).ToList();
+            //List<Customer> PendingCustomerList = new List<Customer>();
+            //for(int i = 0; i < PendingList.Count; i++)
+            //{
+            //    for (int j = 0; j < AllCustomers.Count; j++)
+            //    {
+            //        if (PendingList[i] == AllCustomers[j].CustomerId)
+            //        {
+            //            PendingCustomerList.Add(AllCustomers[j]);
+            //        }
+            //    }
+            //}
+            return View();
+        }
+
         public ActionResult RequestFriend()
         {
 
             FriendsViewModel Friends = new FriendsViewModel();
-
-            Friends.AllCustomers = db.Customers.ToList();
-            Friends.FriendPairs = db.Friends.ToList();
-            LoginViewModel model = new LoginViewModel();
-          
+            List<Customer> AlreadyFriends = new List<Customer>();
+            List<Customer>AllCustomers = db.Customers.ToList();
+            List<Friend>FriendPairs = db.Friends.ToList();
             string currentUserId = User.Identity.GetUserId();
-            Friends.LoggedInCustomer = (from x in Friends.AllCustomers where x.UserId == currentUserId select x).FirstOrDefault();
-            Friends.AllCustomers.Remove(Friends.LoggedInCustomer);
-            List<int?> ConfirmedFriends = (from f in Friends.FriendPairs where f.CustomerIdOne == Friends.LoggedInCustomer.CustomerId select f.CustomerIdTwo).ToList();
-            List<int?> ConfirmedFriendsTwo = (from f in Friends.FriendPairs where f.CustomerIdTwo == Friends.LoggedInCustomer.CustomerId select f.CustomerIdOne).ToList();
+            Friends.LoggedInCustomer = (from x in AllCustomers where x.UserId == currentUserId select x).FirstOrDefault();
+            Friends.Requests = (from x in db.PendingRequests.Include("RequesterId").Include("RequesteeId") where x.CustomerIdTwo == Friends.LoggedInCustomer.CustomerId || x.CustomerIdOne == Friends.LoggedInCustomer.CustomerId select x).ToList();
+            AllCustomers.Remove(Friends.LoggedInCustomer);
+            List<int?> ConfirmedFriends = (from f in FriendPairs where f.CustomerIdOne == Friends.LoggedInCustomer.CustomerId select f.CustomerIdTwo).ToList();
+            List<int?> ConfirmedFriendsTwo = (from f in FriendPairs where f.CustomerIdTwo == Friends.LoggedInCustomer.CustomerId select f.CustomerIdOne).ToList();
             ConfirmedFriends.AddRange(ConfirmedFriendsTwo);
-            for (int i = 0; i < Friends.AllCustomers.Count; i++)
+            for (int i = 0; i < AllCustomers.Count; i++)
             {
                 for (int j = 0; j < Friends.ConfirmedFriends.Count; j++)
                 {
-                    if(Friends.AllCustomers[i].CustomerId == ConfirmedFriends[j])
+                    if(AllCustomers[i].CustomerId == ConfirmedFriends[j])
                     {
-                        Friends.AlreadyFriends.Add(Friends.AllCustomers[i]);
+                        AlreadyFriends.Add(AllCustomers[i]);
                     }
                 }
             }
 
-            for(int i=0; i < Friends.AllCustomers.Count; i++)
+            for(int i=0; i < AllCustomers.Count; i++)
             {
                 bool matchFound = false;
-                for (int j = 0;  j< Friends.AlreadyFriends.Count; j++)
+                for (int j = 0;  j< AlreadyFriends.Count; j++)
                 {
-                    if (Friends.AlreadyFriends[j] == Friends.AllCustomers[i])
+                    if (AlreadyFriends[j] == AllCustomers[i])
                     {
                         matchFound = true;
                     }
@@ -66,31 +88,29 @@ namespace BetweenFriends.Controllers
                 {
                     SelectListItem item = new SelectListItem
                     {
-                        Text = Friends.AllCustomers[i].FullName,
-                        Value = Friends.AllCustomers[i].CustomerId.ToString()
+                        Text = AllCustomers[i].FullName,
+                        Value = AllCustomers[i].CustomerId.ToString()
                     };
                     Friends.AvailableToRequest.Add(item);
                 }
-                
-
             }
             return View("Friends",Friends);
         }
 
         [HttpPost]
-        public ActionResult RequestFriend([Bind(Include = "CustomerIdOne,CustomerIdTwo,PendingRequestId")] PendingRequests pendingRequest)
+        public ActionResult RequestFriend(FriendsViewModel model)
         {
-            //var Request = new PendingRequests { CustomerIdOne = }
-            if (ModelState.IsValid)
-            {
-                //db.Entry(pendingRequest).State = EntityState.Modified;
-                db.PendingRequests.Add(pendingRequest);
-                db.SaveChanges();
-                return RedirectToAction("Index", "Home");
-            }
-            return View("Home");
+            int customerIdTwo = Int32.Parse(model.RequestedCustomerId);
+            string userId = User.Identity.GetUserId();
+            int customerIdOne = (from x in db.Customers where x.UserId == userId select x.CustomerId).FirstOrDefault();
+            PendingRequests request = new PendingRequests();
+            request.CustomerIdOne = customerIdOne;
+            request.CustomerIdTwo = customerIdTwo;
+            db.PendingRequests.Add(request);
+            db.SaveChanges();
+  
+            return RedirectToAction("Index","Home");
         }
-
         
         public ActionResult PotentialFriends()
         {
