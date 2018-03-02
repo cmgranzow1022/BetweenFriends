@@ -32,7 +32,7 @@
 
                     @if (User.IsInRole("Customer"))
                     {
-                        <li>@Html.ActionLink("Friends", "RequestFriend", "Friends")</li>
+                        <li>@Html.ActionLink("Friend Requests", "RequestFriend", "Friends")</li>
                         <li>@Html.ActionLink("Groups", "Index","Group")</li>
                         <li>@Html.ActionLink("Profile","ProfileAccount","Customers")</li>
                     }

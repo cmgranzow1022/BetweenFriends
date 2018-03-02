@@ -2,6 +2,7 @@
 using BetweenFriends.Models.BetweenFriendsModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -18,6 +19,7 @@ namespace BetweenFriends.Models
         //public List<Friend> FriendPairs { get; set; }
         //public List<ApplicationUser> Users { get; set; }
         public List<SelectListItem> AvailableToRequest { get; set; }
+        [Display(Name = "Available Users")]
         public string RequestedCustomerId { get; set; }
         //public List<PendingRequests> PRequest { get; set; }
         public FriendsViewModel()

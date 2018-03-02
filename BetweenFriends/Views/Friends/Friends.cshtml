@@ -5,7 +5,7 @@
    
 }
 
-<h2>Friends</h2>
+<h3>Request Friends</h3>
 
 @*Request Friends*@
 
@@ -17,7 +17,7 @@
     <div class="form-group">
         @Html.LabelFor(m => m.RequestedCustomerId, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.DropDownListFor(m => m.RequestedCustomerId, Model.AvailableToRequest ,new { @class = "form-control" })
+            @Html.DropDownListFor(m => m.RequestedCustomerId, Model.AvailableToRequest,"--Select User From List--" ,new { @class = "form-control" })
         </div>
     </div>
 
@@ -57,8 +57,8 @@
                     </td>
 
                     <td>
-                        @Html.ActionLink("Accept", "Accept", new { id = item.PendingRequestId }) 
-                        @Html.ActionLink("Decline", "Decline", new { id = item.PendingRequestId }) 
+                        @Html.ActionLink("Accept", "AcceptFriendRequest", new { id = item.PendingRequestId }) |
+                        @Html.ActionLink("Decline", "DeclineFriendRequest", new { id = item.PendingRequestId }) 
 
                     </td>
                 </tr>
@@ -88,7 +88,7 @@
                         </td>
 
                         <td>
-                            @Html.ActionLink("Cancel", "Cancel", new { id = item.PendingRequestId }) 
+                            @Html.ActionLink("Cancel", "CancelFriendRequest", new { id = item.PendingRequestId }) 
                            
 
                         </td>

@@ -56,16 +56,18 @@ namespace BetweenFriends.Controllers
             List<Customer> AlreadyFriends = new List<Customer>();
             List<Customer>AllCustomers = db.Customers.ToList();
             List<Friend>FriendPairs = db.Friends.ToList();
+            List<PendingRequests> PendingRequests = db.PendingRequests.ToList();
             string currentUserId = User.Identity.GetUserId();
             Friends.LoggedInCustomer = (from x in AllCustomers where x.UserId == currentUserId select x).FirstOrDefault();
             Friends.Requests = (from x in db.PendingRequests.Include("RequesterId").Include("RequesteeId") where x.CustomerIdTwo == Friends.LoggedInCustomer.CustomerId || x.CustomerIdOne == Friends.LoggedInCustomer.CustomerId select x).ToList();
             AllCustomers.Remove(Friends.LoggedInCustomer);
             List<int?> ConfirmedFriends = (from f in FriendPairs where f.CustomerIdOne == Friends.LoggedInCustomer.CustomerId select f.CustomerIdTwo).ToList();
             List<int?> ConfirmedFriendsTwo = (from f in FriendPairs where f.CustomerIdTwo == Friends.LoggedInCustomer.CustomerId select f.CustomerIdOne).ToList();
+            List<int?> PendingFriends = (from f in PendingRequests where f.CustomerIdOne == Friends.LoggedInCustomer.CustomerId select f.CustomerIdTwo).ToList();
             ConfirmedFriends.AddRange(ConfirmedFriendsTwo);
             for (int i = 0; i < AllCustomers.Count; i++)
             {
-                for (int j = 0; j < Friends.ConfirmedFriends.Count; j++)
+                for (int j = 0; j < ConfirmedFriends.Count; j++)
                 {
                     if(AllCustomers[i].CustomerId == ConfirmedFriends[j])
                     {
@@ -73,8 +75,18 @@ namespace BetweenFriends.Controllers
                     }
                 }
             }
+            for (int i = 0; i < AllCustomers.Count; i++)
+            {
+                for (int j = 0; j < PendingFriends.Count; j++)
+                {
+                    if (AllCustomers[i].CustomerId == PendingFriends[j])
+                    {
+                        AlreadyFriends.Add(AllCustomers[i]);
+                    }
+                }
+            }
 
-            for(int i=0; i < AllCustomers.Count; i++)
+            for (int i=0; i < AllCustomers.Count; i++)
             {
                 bool matchFound = false;
                 for (int j = 0;  j< AlreadyFriends.Count; j++)
@@ -109,16 +121,47 @@ namespace BetweenFriends.Controllers
             db.PendingRequests.Add(request);
             db.SaveChanges();
   
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("RequestFriend","Friends");
         }
         
         public ActionResult PotentialFriends()
         {
             return View();
         }
-       
-    
         
+        public ActionResult AcceptFriendRequest(int? id)
+        {
+            Friend addToFriendList = new Friend();
+            PendingRequests pendingRequest = db.PendingRequests.Find(id);
+            addToFriendList.CustomerIdOne = pendingRequest.CustomerIdOne;
+            addToFriendList.CustomerIdTwo = pendingRequest.CustomerIdTwo; 
+            db.Friends.Add(addToFriendList);
+            db.PendingRequests.Remove(pendingRequest);
+            db.SaveChanges();
+            return RedirectToAction("RequestFriend", "Friends");
+
+        }
+        
+        public ActionResult DeclineFriendRequest(int? id)
+        {
+            PendingRequests pendingRequest = db.PendingRequests.Find(id);
+            db.PendingRequests.Remove(pendingRequest);
+            db.SaveChanges();
+            return RedirectToAction("RequestFriend", "Friends");
+
+        }
+
+        public ActionResult CancelFriendRequest(int? id)
+        {
+            PendingRequests pendingRequest = db.PendingRequests.Find(id);
+            db.PendingRequests.Remove(pendingRequest);
+            db.SaveChanges();
+            return RedirectToAction("RequestFriend", "Friends");
+
+        }
+
+
+
 
 
         // GET: Friends
