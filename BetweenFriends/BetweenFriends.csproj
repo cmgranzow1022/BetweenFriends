@@ -199,59 +199,20 @@
     <Compile Include="Controllers\AddressesController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\FriendsController.cs" />
+    <Compile Include="Controllers\GroupsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PendingRequestsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\BFMigrations\201802272000447_InitialCreate.cs" />
-    <Compile Include="Migrations\BFMigrations\201802272000447_InitialCreate.Designer.cs">
-      <DependentUpon>201802272000447_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\BFMigrations\201803022116395_InitialCreate.cs" />
+    <Compile Include="Migrations\BFMigrations\201803022116395_InitialCreate.Designer.cs">
+      <DependentUpon>201803022116395_InitialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\BFMigrations\201802272022125_updatedGroup.cs" />
-    <Compile Include="Migrations\BFMigrations\201802272022125_updatedGroup.Designer.cs">
-      <DependentUpon>201802272022125_updatedGroup.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\BFMigrations\201802272030139_addedRoles.cs" />
-    <Compile Include="Migrations\BFMigrations\201802272030139_addedRoles.Designer.cs">
-      <DependentUpon>201802272030139_addedRoles.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\BFMigrations\201802272126139_fixTables.cs" />
-    <Compile Include="Migrations\BFMigrations\201802272126139_fixTables.Designer.cs">
-      <DependentUpon>201802272126139_fixTables.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\BFMigrations\201802281403049_updatedFriendModel.cs" />
-    <Compile Include="Migrations\BFMigrations\201802281403049_updatedFriendModel.Designer.cs">
-      <DependentUpon>201802281403049_updatedFriendModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\BFMigrations\201802281409375_updatedGroupModel.cs" />
-    <Compile Include="Migrations\BFMigrations\201802281409375_updatedGroupModel.Designer.cs">
-      <DependentUpon>201802281409375_updatedGroupModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\BFMigrations\201802281413033_updatedRemainingModels.cs" />
-    <Compile Include="Migrations\BFMigrations\201802281413033_updatedRemainingModels.Designer.cs">
-      <DependentUpon>201802281413033_updatedRemainingModels.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\BFMigrations\201802281422417_updatedRSModels.cs" />
-    <Compile Include="Migrations\BFMigrations\201802281422417_updatedRSModels.Designer.cs">
-      <DependentUpon>201802281422417_updatedRSModels.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\BFMigrations\201802281626061_addedUserId.cs" />
-    <Compile Include="Migrations\BFMigrations\201802281626061_addedUserId.Designer.cs">
-      <DependentUpon>201802281626061_addedUserId.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\BFMigrations\201802281721446_addedPendingRequestTable.cs" />
-    <Compile Include="Migrations\BFMigrations\201802281721446_addedPendingRequestTable.Designer.cs">
-      <DependentUpon>201802281721446_addedPendingRequestTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\BFMigrations\201803011414323_updatedCustomers.cs" />
-    <Compile Include="Migrations\BFMigrations\201803011414323_updatedCustomers.Designer.cs">
-      <DependentUpon>201803011414323_updatedCustomers.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\BFMigrations\201803011738507_PRTable.cs" />
-    <Compile Include="Migrations\BFMigrations\201803011738507_PRTable.Designer.cs">
-      <DependentUpon>201803011738507_PRTable.cs</DependentUpon>
+    <Compile Include="Migrations\BFMigrations\201803022203569_DBUpdates.cs" />
+    <Compile Include="Migrations\BFMigrations\201803022203569_DBUpdates.Designer.cs">
+      <DependentUpon>201803022203569_DBUpdates.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\BFMigrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -266,6 +227,7 @@
     <Compile Include="Models\BetweenFriendsModels\RestaurantSelection.cs" />
     <Compile Include="Models\BetweenFriendsModels\Veto.cs" />
     <Compile Include="Models\FriendsViewModel.cs" />
+    <Compile Include="Models\GroupViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -355,6 +317,12 @@
     <Content Include="Views\PendingRequests\Details.cshtml" />
     <Content Include="Views\PendingRequests\Edit.cshtml" />
     <Content Include="Views\PendingRequests\Index.cshtml" />
+    <Content Include="Views\Groups\Create.cshtml" />
+    <Content Include="Views\Groups\Delete.cshtml" />
+    <Content Include="Views\Groups\Details.cshtml" />
+    <Content Include="Views\Groups\Edit.cshtml" />
+    <Content Include="Views\Groups\Index.cshtml" />
+    <Content Include="Views\Groups\Group.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -366,41 +334,11 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\BFMigrations\201802272000447_InitialCreate.resx">
-      <DependentUpon>201802272000447_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\BFMigrations\201803022116395_InitialCreate.resx">
+      <DependentUpon>201803022116395_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\BFMigrations\201802272022125_updatedGroup.resx">
-      <DependentUpon>201802272022125_updatedGroup.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\BFMigrations\201802272030139_addedRoles.resx">
-      <DependentUpon>201802272030139_addedRoles.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\BFMigrations\201802272126139_fixTables.resx">
-      <DependentUpon>201802272126139_fixTables.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\BFMigrations\201802281403049_updatedFriendModel.resx">
-      <DependentUpon>201802281403049_updatedFriendModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\BFMigrations\201802281409375_updatedGroupModel.resx">
-      <DependentUpon>201802281409375_updatedGroupModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\BFMigrations\201802281413033_updatedRemainingModels.resx">
-      <DependentUpon>201802281413033_updatedRemainingModels.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\BFMigrations\201802281422417_updatedRSModels.resx">
-      <DependentUpon>201802281422417_updatedRSModels.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\BFMigrations\201802281626061_addedUserId.resx">
-      <DependentUpon>201802281626061_addedUserId.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\BFMigrations\201802281721446_addedPendingRequestTable.resx">
-      <DependentUpon>201802281721446_addedPendingRequestTable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\BFMigrations\201803011414323_updatedCustomers.resx">
-      <DependentUpon>201803011414323_updatedCustomers.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\BFMigrations\201803011738507_PRTable.resx">
-      <DependentUpon>201803011738507_PRTable.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\BFMigrations\201803022203569_DBUpdates.resx">
+      <DependentUpon>201803022203569_DBUpdates.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

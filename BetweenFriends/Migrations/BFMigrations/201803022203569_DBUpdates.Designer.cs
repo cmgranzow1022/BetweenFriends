@@ -7,13 +7,13 @@ namespace BetweenFriends.Migrations.BFMigrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class addedRoles : IMigrationMetadata
+    public sealed partial class DBUpdates : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(addedRoles));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(DBUpdates));
         
         string IMigrationMetadata.Id
         {
-            get { return "201802272030139_addedRoles"; }
+            get { return "201803022203569_DBUpdates"; }
         }
         
         string IMigrationMetadata.Source

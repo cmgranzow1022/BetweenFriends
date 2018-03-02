@@ -6,6 +6,7 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.min.css" rel="stylesheet" type="text/css" />
 
 </head>
 <body>
@@ -33,7 +34,7 @@
                     @if (User.IsInRole("Customer"))
                     {
                         <li>@Html.ActionLink("Friend Requests", "RequestFriend", "Friends")</li>
-                        <li>@Html.ActionLink("Groups", "Index","Group")</li>
+                        <li>@Html.ActionLink("Groups", "CreateGroup","Groups")</li>
                         <li>@Html.ActionLink("Profile","ProfileAccount","Customers")</li>
                     }
 

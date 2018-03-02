@@ -7,13 +7,13 @@ namespace BetweenFriends.Migrations.BFMigrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class updatedGroup : IMigrationMetadata
+    public sealed partial class InitialCreate : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(updatedGroup));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialCreate));
         
         string IMigrationMetadata.Id
         {
-            get { return "201802272022125_updatedGroup"; }
+            get { return "201803022116395_InitialCreate"; }
         }
         
         string IMigrationMetadata.Source

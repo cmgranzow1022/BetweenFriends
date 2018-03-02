@@ -1,0 +1,118 @@
+﻿@model BetweenFriends.Models.GroupViewModel
+
+@{
+    ViewBag.Title = "CreateGroup";
+   
+}
+
+<h3>Create Group</h3>
+
+
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control", @id = "date-picker" } })
+            @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Time, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Time, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Time, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.GroupName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.GroupName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.GroupName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+
+
+
+
+<div class="form-group">
+    <div class="col-md-10">
+        <input type="submit" class="btn btn-default" value="Add To Group" />
+        <br />
+        <br />
+        <br />
+        <br />
+
+    </div>
+</div>
+
+
+}
+    <h3>Add Friends To Group</h3>
+    @using (Html.BeginForm())
+    {
+    @Html.HiddenFor(m => m.LoggedInCustomer)
+    @Html.HiddenFor(m => m.customerGroup)
+<div class="form-group">
+        @Html.LabelFor(m => m.RequestedCustomerId, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.ListBoxFor(m => m.RequestedCustomerId, Model.AvailableToAdd, new { multiple = true })
+        </div>
+    </div>
+<br />
+<br />
+<br />
+    <h3>My Pending Requests</h3>
+    <div>
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.customerGroup[0].CustomerId)
+                </th>
+
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.customerGroup)
+            {
+                if (Model.LoggedInCustomer.CustomerId == item.CustomerId)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CustomerId)
+                        </td>
+
+                        <td>
+                            @*@Html.ActionLink("Accept", "AcceptFriendRequest", new { id = item.PendingRequestId }) |
+                            @Html.ActionLink("Decline", "DeclineFriendRequest", new { id = item.PendingRequestId })*@
+
+                        </td>
+                    </tr>
+                }
+            }
+
+        </table>
+       
+
+    </div>
+    }
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script src="http://code.jquery.com/jquery-3.3.1.js"
+        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"
+        integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
+        crossorigin="anonymous"></script>
+<script type='text/javascript'>
+
+   $('#date-picker').datepicker();
+
+</script>
