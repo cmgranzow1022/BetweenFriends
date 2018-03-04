@@ -43,5 +43,9 @@ namespace BetweenFriends.Models
         public DbSet<RestaurantSelection> RestaurantSelection { get; set; }
 
         public DbSet<PendingRequests> PendingRequests { get; set; }
+        public DbSet<Customer_Address> Customer_Addresses { get; set; }
+        public DbSet<Customer_Group> Customer_Group { get; set; }
+
     }
+
 }

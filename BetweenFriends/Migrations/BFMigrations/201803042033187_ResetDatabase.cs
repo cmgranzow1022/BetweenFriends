@@ -3,7 +3,7 @@ namespace BetweenFriends.Migrations.BFMigrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialCreate : DbMigration
+    public partial class ResetDatabase : DbMigration
     {
         public override void Up()
         {
@@ -18,6 +18,20 @@ namespace BetweenFriends.Migrations.BFMigrations
                         ZipCode = c.String(maxLength: 5),
                     })
                 .PrimaryKey(t => t.AddressId);
+            
+            CreateTable(
+                "dbo.Customer_Address",
+                c => new
+                    {
+                        Customer_AddressId = c.Int(nullable: false, identity: true),
+                        CustomerId = c.Int(nullable: false),
+                        AddressId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Customer_AddressId)
+                .ForeignKey("dbo.Addresses", t => t.AddressId, cascadeDelete: true)
+                .ForeignKey("dbo.Customers", t => t.CustomerId, cascadeDelete: true)
+                .Index(t => t.CustomerId)
+                .Index(t => t.AddressId);
             
             CreateTable(
                 "dbo.Customers",
@@ -93,6 +107,31 @@ namespace BetweenFriends.Migrations.BFMigrations
                 .Index(t => t.RoleId);
             
             CreateTable(
+                "dbo.Customer_Group",
+                c => new
+                    {
+                        Customer_GroupId = c.Int(nullable: false, identity: true),
+                        GroupId = c.Int(nullable: false),
+                        CustomerId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Customer_GroupId)
+                .ForeignKey("dbo.Customers", t => t.CustomerId, cascadeDelete: true)
+                .ForeignKey("dbo.Groups", t => t.GroupId, cascadeDelete: true)
+                .Index(t => t.GroupId)
+                .Index(t => t.CustomerId);
+            
+            CreateTable(
+                "dbo.Groups",
+                c => new
+                    {
+                        GroupId = c.Int(nullable: false, identity: true),
+                        GroupName = c.String(),
+                        Date = c.String(),
+                        Time = c.String(),
+                    })
+                .PrimaryKey(t => t.GroupId);
+            
+            CreateTable(
                 "dbo.Friends",
                 c => new
                     {
@@ -107,21 +146,18 @@ namespace BetweenFriends.Migrations.BFMigrations
                 .Index(t => t.CustomerIdTwo);
             
             CreateTable(
-                "dbo.Groups",
+                "dbo.PendingRequests",
                 c => new
                     {
-                        GroupId = c.Int(nullable: false, identity: true),
-                        CustomerId = c.Int(nullable: false),
-                        RestaurantId = c.Int(),
-                        GroupName = c.String(),
-                        Date = c.String(),
-                        Time = c.String(),
+                        CustomerIdOne = c.Int(),
+                        CustomerIdTwo = c.Int(),
+                        PendingRequestId = c.Int(nullable: false, identity: true),
                     })
-                .PrimaryKey(t => t.GroupId)
-                .ForeignKey("dbo.Customers", t => t.CustomerId, cascadeDelete: true)
-                .ForeignKey("dbo.Restaurants", t => t.RestaurantId)
-                .Index(t => t.CustomerId)
-                .Index(t => t.RestaurantId);
+                .PrimaryKey(t => t.PendingRequestId)
+                .ForeignKey("dbo.Customers", t => t.CustomerIdTwo)
+                .ForeignKey("dbo.Customers", t => t.CustomerIdOne)
+                .Index(t => t.CustomerIdOne)
+                .Index(t => t.CustomerIdTwo);
             
             CreateTable(
                 "dbo.Restaurants",
@@ -136,20 +172,6 @@ namespace BetweenFriends.Migrations.BFMigrations
                         ZipCode = c.String(),
                     })
                 .PrimaryKey(t => t.RestaurantId);
-            
-            CreateTable(
-                "dbo.PendingRequests",
-                c => new
-                    {
-                        CustomerIdOne = c.Int(),
-                        CustomerIdTwo = c.Int(),
-                        PendingRequestId = c.Int(nullable: false, identity: true),
-                    })
-                .PrimaryKey(t => t.PendingRequestId)
-                .ForeignKey("dbo.Customers", t => t.CustomerIdTwo)
-                .ForeignKey("dbo.Customers", t => t.CustomerIdOne)
-                .Index(t => t.CustomerIdOne)
-                .Index(t => t.CustomerIdTwo);
             
             CreateTable(
                 "dbo.RestaurantSelections",
@@ -198,42 +220,48 @@ namespace BetweenFriends.Migrations.BFMigrations
             DropForeignKey("dbo.RestaurantSelections", "GroupId", "dbo.Groups");
             DropForeignKey("dbo.PendingRequests", "CustomerIdOne", "dbo.Customers");
             DropForeignKey("dbo.PendingRequests", "CustomerIdTwo", "dbo.Customers");
-            DropForeignKey("dbo.Groups", "RestaurantId", "dbo.Restaurants");
-            DropForeignKey("dbo.Groups", "CustomerId", "dbo.Customers");
             DropForeignKey("dbo.Friends", "CustomerIdOne", "dbo.Customers");
             DropForeignKey("dbo.Friends", "CustomerIdTwo", "dbo.Customers");
+            DropForeignKey("dbo.Customer_Group", "GroupId", "dbo.Groups");
+            DropForeignKey("dbo.Customer_Group", "CustomerId", "dbo.Customers");
+            DropForeignKey("dbo.Customer_Address", "CustomerId", "dbo.Customers");
             DropForeignKey("dbo.Customers", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Customer_Address", "AddressId", "dbo.Addresses");
             DropIndex("dbo.Vetoes", new[] { "RestaurantId" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
             DropIndex("dbo.RestaurantSelections", new[] { "GroupId" });
             DropIndex("dbo.RestaurantSelections", new[] { "RestaurantId" });
             DropIndex("dbo.PendingRequests", new[] { "CustomerIdTwo" });
             DropIndex("dbo.PendingRequests", new[] { "CustomerIdOne" });
-            DropIndex("dbo.Groups", new[] { "RestaurantId" });
-            DropIndex("dbo.Groups", new[] { "CustomerId" });
             DropIndex("dbo.Friends", new[] { "CustomerIdTwo" });
             DropIndex("dbo.Friends", new[] { "CustomerIdOne" });
+            DropIndex("dbo.Customer_Group", new[] { "CustomerId" });
+            DropIndex("dbo.Customer_Group", new[] { "GroupId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
             DropIndex("dbo.Customers", new[] { "UserId" });
+            DropIndex("dbo.Customer_Address", new[] { "AddressId" });
+            DropIndex("dbo.Customer_Address", new[] { "CustomerId" });
             DropTable("dbo.Vetoes");
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.RestaurantSelections");
-            DropTable("dbo.PendingRequests");
             DropTable("dbo.Restaurants");
-            DropTable("dbo.Groups");
+            DropTable("dbo.PendingRequests");
             DropTable("dbo.Friends");
+            DropTable("dbo.Groups");
+            DropTable("dbo.Customer_Group");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
             DropTable("dbo.Customers");
+            DropTable("dbo.Customer_Address");
             DropTable("dbo.Addresses");
         }
     }

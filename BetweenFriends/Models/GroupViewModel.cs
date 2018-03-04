@@ -10,11 +10,15 @@ namespace BetweenFriends.Models
 {
     public class GroupViewModel
     {
+        public List<Customer> FriendsInList { get; set; }
+
         public Customer LoggedInCustomer { get; set; }
         public List<Friend> ListOfFriends { get; set; }
         public List<SelectListItem> AvailableToAdd { get; set; }
         public string RequestedCustomerId { get; set; }
         public List<Customer_Group> customerGroup { get; set; }
+        public int currentGroup { get; set; }
+        public List<Customer> CustomersInGroup { get; set; }
 
         [Required]
         [Display(Name = "Date")]
@@ -32,6 +36,7 @@ namespace BetweenFriends.Models
 
         public GroupViewModel()
         {
+            FriendsInList = new List<Customer>();
             ListOfFriends = new List<Friend>();
             AvailableToAdd = new List<SelectListItem>();
             customerGroup = new List<Customer_Group>();

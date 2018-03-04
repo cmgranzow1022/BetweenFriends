@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using BetweenFriends.Models;
 using BetweenFriends.Models.BetweenFriends;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Collections.Generic;
 
 namespace BetweenFriends.Controllers
 {
@@ -173,6 +174,11 @@ namespace BetweenFriends.Controllers
                     db.Addresses.Add(address);
                     userManager.AddToRole(userManager.FindByEmail(user.Email).Id, "Customer");
                     db.SaveChanges();
+                List<Customer> AllCustomers = db.Customers.ToList();
+                List<Address> AllAddresses = db.Addresses.ToList();
+                var customerDbId = (from f in AllCustomers where f.FullName == customer.FullName select f.CustomerId).FirstOrDefault();
+                int addressDbId = (from f in AllAddresses where f.Street == address.Street select f.AddressId).FirstOrDefault();
+                    AddToCustomerAddress(customerDbId, addressDbId);
                     AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                     return RedirectToAction("Login", "Account");
                 }
@@ -184,6 +190,15 @@ namespace BetweenFriends.Controllers
             return View(model);
         }
 
+        public void AddToCustomerAddress(int customerDbId, int addressDbId)
+        {
+            Customer_Address customerAddress = new Customer_Address();
+            customerAddress.AddressId = addressDbId;
+            customerAddress.CustomerId = customerDbId;
+            db.Customer_Addresses.Add(customerAddress);
+            db.SaveChanges();
+
+        }
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]

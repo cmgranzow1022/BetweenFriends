@@ -7,13 +7,13 @@ namespace BetweenFriends.Migrations.BFMigrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class DBUpdates : IMigrationMetadata
+    public sealed partial class ResetDatabase : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(DBUpdates));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(ResetDatabase));
         
         string IMigrationMetadata.Id
         {
-            get { return "201803022203569_DBUpdates"; }
+            get { return "201803042033187_ResetDatabase"; }
         }
         
         string IMigrationMetadata.Source

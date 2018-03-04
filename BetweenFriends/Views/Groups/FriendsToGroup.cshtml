@@ -1,0 +1,82 @@
+﻿@model BetweenFriends.Models.GroupViewModel
+
+@{
+    ViewBag.Title = "FriendsToGroup";
+   
+}
+
+<h3>Add Friends To Group</h3>
+
+@*Request Friends*@
+
+
+@using (Html.BeginForm())
+{
+   
+    @Html.HiddenFor(m => m.LoggedInCustomer)
+    <div class="form-group">
+        @Html.LabelFor(m => m.RequestedCustomerId, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.RequestedCustomerId, Model.AvailableToAdd,"--Select User From List--" ,new { @class = "form-control" })
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-md-10">
+            <input type="submit" class="btn btn-default" value="Add Friend To Group" />
+        </div>
+    </div>
+
+}
+
+<br />
+<br />
+<br />
+<br />
+<br />
+
+    <h3>Friends In Group</h3>
+    <div>
+
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.FriendsInList[0].FullName)
+                </th>
+
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.customerGroup)
+            {
+                if ( Model.currentGroup == item.GroupId)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CustomerId)
+                        </td>
+
+                        <td>
+                            @Html.ActionLink("Cancel", "CancelFriendRequest", new { id = item.CustomerId }) 
+                           
+
+                        </td>
+                    </tr>
+                }
+            }
+
+        </table>
+
+    </div>
+
+<div class="form-group">
+    <div class="col-md-10">
+        @*<input type="submit" class="btn btn-default" value="Get Central Location" />*@
+        <p class="btn btn-default"> @Html.ActionLink("Get Central Location", "MapView", "Groups")</p>
+     </div>
+</div>
+
+
+
+@*See pending friend requests*@

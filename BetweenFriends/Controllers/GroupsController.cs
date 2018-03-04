@@ -25,13 +25,37 @@ namespace BetweenFriends.Controllers
         }
 
 
-
         public ActionResult CreateGroup()
+        {
+            return View("Group");
+        }
+        [HttpPost]
+        public ActionResult CreateGroup([Bind(Include = "Date,Time,GroupId,GroupName")]GroupViewModel model)
+        {
+            Group group = new Group();
+            string userId = User.Identity.GetUserId();
+            group.Date = model.Date;
+            group.Time = model.Time;
+            group.GroupName = model.GroupName;
+            db.Groups.Add(group);
+            db.SaveChanges();
+            List<Group> groups = db.Groups.ToList();
+            model.currentGroup = groups[groups.Count - 1].GroupId;
+            Customer_Group customerGroup = new Customer_Group();
+            customerGroup.GroupId = model.currentGroup;
+            List<Customer> AllCustomers = db.Customers.ToList();
+            var loggedInUserId = User.Identity.GetUserId();
+            customerGroup.CustomerId = (from x in AllCustomers where x.UserId == loggedInUserId select x.CustomerId).FirstOrDefault();
+            db.Customer_Group.Add(customerGroup);
+            db.SaveChanges();
+            return RedirectToAction("FriendsToGroup", "Groups");
+        }
+
+        public ActionResult FriendsToGroup()
         {
             List<Customer> AllCustomers = db.Customers.ToList();
             GroupViewModel Groups = new GroupViewModel();
             List<Friend> Friends = db.Friends.ToList();
-            List<Customer> FriendsInList = new List<Customer>();
             string currentUserId = User.Identity.GetUserId();
             Groups.LoggedInCustomer = (from x in AllCustomers where x.UserId == currentUserId select x).FirstOrDefault();
             List<int?> ConfirmedFriends = (from f in Friends where f.CustomerIdOne == Groups.LoggedInCustomer.CustomerId select f.CustomerIdTwo).ToList();
@@ -43,37 +67,73 @@ namespace BetweenFriends.Controllers
                 {
                     if (AllCustomers[i].CustomerId == ConfirmedFriends[j])
                     {
-                        FriendsInList.Add(AllCustomers[i]);
+                        Groups.FriendsInList.Add(AllCustomers[i]);
                     }
                 }
             }
-            for (int i = 0; i < FriendsInList.Count; i++)
+            for (int i = 0; i < Groups.FriendsInList.Count; i++)
             {
 
                     SelectListItem item = new SelectListItem
                     {
-                        Text = FriendsInList[i].FullName,
-                        Value = FriendsInList[i].CustomerId.ToString()
+                        Text = Groups.FriendsInList[i].FullName,
+                        Value = Groups.FriendsInList[i].CustomerId.ToString()
                     };
                     Groups.AvailableToAdd.Add(item);
             }
-            return View("Group",Groups);
+            
+            return View("FriendsToGroup",Groups);
         }
 
         [HttpPost]
-        public ActionResult CreateGroup([Bind(Include = "Date,Time,GroupId,GroupName")]GroupViewModel model)
+        public ActionResult FriendsToGroup(GroupViewModel model)
         {
-            Group group = new Group();
-            string userId = User.Identity.GetUserId();
-            group.Date = model.Date;
-            group.Time = model.Time;
-            group.GroupName = model.GroupName;
-            db.Groups.Add(group);
+            List<Group> group = new List<Group>();
+            group = db.Groups.ToList();
+            List<Customer> AllCustomers = new List<Customer>();
+            List<Customer> CustomersInGroup = new List<Customer>();
+            List<int> CustomerIdsInGroup = new List<int>();
+            AllCustomers = db.Customers.ToList();
+            List<Customer_Group> CustomerGroup = new List<Customer_Group>();
+            CustomerGroup = db.Customer_Group.ToList();
+            Customer_Group newCustomerGroup = new Customer_Group();
+            model.currentGroup = group[group.Count - 1].GroupId;
+   
+            newCustomerGroup.GroupId = model.currentGroup;
+            newCustomerGroup.CustomerId = Int32.Parse(model.RequestedCustomerId);
+
+            model.CustomersInGroup = CustomersInGroup;
+            db.Customer_Group.Add(newCustomerGroup);
+           
             db.SaveChanges();
-            return RedirectToAction("CreateGroup", "Groups");
+            return RedirectToAction("FriendsToGroup","Groups");
         }
 
+        public ActionResult MapView(GroupViewModel model)
+        {
+            List<Group> group = new List<Group>();
+            group = db.Groups.ToList();
+            List<Customer_Address> customerAddresses = new List<Customer_Address>();
+            customerAddresses = db.Customer_Addresses.ToList();
+            List<Address> mapAddresses = new List<Address>();
+            model.currentGroup = group[group.Count - 1].GroupId;
 
+            List<Customer> customersInGroup = (from y in db.Customer_Group where y.GroupId == model.currentGroup select y.Customer).ToList();
+            for (int i = 0; i < customersInGroup.Count; i ++)
+            {
+                for(int j = 0; j < customerAddresses.Count; j++)
+                {
+                   if(customerAddresses[j].CustomerId == customersInGroup[i].CustomerId)
+                    {
+                        mapAddresses.Add(customerAddresses[j].Address);
+                    }
+                }
+                
+            }
+
+            return View(mapAddresses);
+
+        }
 
         // GET: Groups/Details/5
         public ActionResult Details(int? id)
