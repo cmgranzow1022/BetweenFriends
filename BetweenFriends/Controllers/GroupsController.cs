@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using BetweenFriends.Models;
 using BetweenFriends.Models.BetweenFriends;
 using Microsoft.AspNet.Identity;
+using GeoCoordinatePortable;
 
 
 namespace BetweenFriends.Controllers
@@ -22,6 +23,40 @@ namespace BetweenFriends.Controllers
         {
             var groups = db.Groups;
             return View(groups.ToList());
+        }
+
+        public ActionResult DisplayCenterPoint()
+        {
+            List<GeoCoordinate> listCoordinate = new List<GeoCoordinate>();
+            listCoordinate.Add(new GeoCoordinate() { Latitude = 0, Longitude = 0 });
+            GeoCoordinate centerCoordinate = GetCentralGeoCoordinate(listCoordinate);
+            Console.WriteLine("Lat:" + centerCoordinate.Latitude + ",Lon:" + centerCoordinate.Longitude);
+            return View();
+        }
+        public static GeoCoordinate GetCentralGeoCoordinate(List<GeoCoordinate> geoCoordinates)
+        {
+            if (geoCoordinates.Count == 1)
+            {
+                return geoCoordinates.Single();
+            }
+            double x = 0, y = 0, z = 0;
+            foreach (var geoCoordinate in geoCoordinates)
+            {
+                var latitude = geoCoordinate.Latitude * Math.PI / 180;
+                var longitude = geoCoordinate.Longitude * Math.PI / 180;
+
+                x += Math.Cos(latitude) * Math.Cos(longitude);
+                y += Math.Cos(latitude) * Math.Sin(longitude);
+                z += Math.Sin(latitude);
+            }
+            var total = geoCoordinates.Count;
+            x = x / total;
+            y = y / total;
+            z = z / total;
+            var centralLongitude = Math.Atan2(y, x);
+            var centralSquareRoot = Math.Sqrt(x * x + y * y);
+            var centralLatitude = Math.Atan2(z, centralSquareRoot);
+            return new GeoCoordinate(centralLatitude * 180 / Math.PI, centralLongitude * 180 / Math.PI);
         }
 
 
@@ -61,6 +96,10 @@ namespace BetweenFriends.Controllers
             List<int?> ConfirmedFriends = (from f in Friends where f.CustomerIdOne == Groups.LoggedInCustomer.CustomerId select f.CustomerIdTwo).ToList();
             List<int?> ConfirmedFriendsTwo = (from f in Friends where f.CustomerIdTwo == Groups.LoggedInCustomer.CustomerId select f.CustomerIdOne).ToList();
             ConfirmedFriends.AddRange(ConfirmedFriendsTwo);
+            List<Group> group = new List<Group>();
+            group = db.Groups.ToList();
+            Groups.currentGroup = group[group.Count - 1].GroupId;
+            Groups.customerGroup = db.Customer_Group.ToList();
             for (int i = 0; i < AllCustomers.Count; i++)
             {
                 for (int j = 0; j < ConfirmedFriends.Count; j++)
@@ -133,6 +172,14 @@ namespace BetweenFriends.Controllers
 
             return View(mapAddresses);
 
+        }
+
+        
+
+
+        public ActionResult RestaurantView()
+        {
+            return View("RestaurantView");
         }
 
         // GET: Groups/Details/5

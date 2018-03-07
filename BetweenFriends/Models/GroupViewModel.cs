@@ -15,6 +15,7 @@ namespace BetweenFriends.Models
         public Customer LoggedInCustomer { get; set; }
         public List<Friend> ListOfFriends { get; set; }
         public List<SelectListItem> AvailableToAdd { get; set; }
+        [Display(Name = "Add Friends To Group")]
         public string RequestedCustomerId { get; set; }
         public List<Customer_Group> customerGroup { get; set; }
         public int currentGroup { get; set; }

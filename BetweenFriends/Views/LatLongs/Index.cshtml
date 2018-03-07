@@ -1,0 +1,39 @@
+﻿@model IEnumerable<BetweenFriends.Models.LatLong>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Lat)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Long)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Lat)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Long)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.latLongId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.latLongId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.latLongId })
+        </td>
+    </tr>
+}
+
+</table>

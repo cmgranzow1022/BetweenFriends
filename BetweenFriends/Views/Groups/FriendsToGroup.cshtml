@@ -4,7 +4,7 @@
     ViewBag.Title = "FriendsToGroup";
    
 }
-
+<br />
 <h3>Add Friends To Group</h3>
 
 @*Request Friends*@
@@ -24,7 +24,7 @@
 
     <div class="form-group">
         <div class="col-md-10">
-            <input type="submit" class="btn btn-default" value="Add Friend To Group" />
+            <input type="submit" class="btn btn-default" value="Add" />
         </div>
     </div>
 
@@ -42,7 +42,7 @@
         <table class="table">
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.FriendsInList[0].FullName)
+                    @Html.DisplayNameFor(model => model.customerGroup[0].Customer.FullName)
                 </th>
 
                 <th></th>
@@ -54,11 +54,11 @@
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.CustomerId)
+                            @Html.DisplayFor(modelItem => item.Customer.FullName)
                         </td>
 
                         <td>
-                            @Html.ActionLink("Cancel", "CancelFriendRequest", new { id = item.CustomerId }) 
+                            @Html.ActionLink("Cancel", "CancelFriendRequest", new { id = item.Customer.CustomerId }) 
                            
 
                         </td>
@@ -79,4 +79,10 @@
 
 
 
-@*See pending friend requests*@
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />

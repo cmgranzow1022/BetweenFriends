@@ -46,6 +46,7 @@ namespace BetweenFriends.Models
         public DbSet<Customer_Address> Customer_Addresses { get; set; }
         public DbSet<Customer_Group> Customer_Group { get; set; }
 
+
     }
 
 }
